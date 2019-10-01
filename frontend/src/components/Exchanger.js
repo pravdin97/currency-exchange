@@ -16,7 +16,7 @@ function Exchanger() {
                 setFromCurrency(res.data.currencyTypes[0].code)
                 setToCurrency(res.data.currencyTypes[0].code)
             })
-            .catch(err => console.log(err))
+            .catch(setResult('В данный момент невозможно произвести расчет'))
     }, [])
 
     function amountChangeHandler(a) {
@@ -43,6 +43,7 @@ function Exchanger() {
                 }
             })
             .then(res => setResult(res.data.result))
+            .catch(setResult('В данный момент невозможно произвести расчет'))
         }
     }
 
@@ -55,7 +56,7 @@ function Exchanger() {
                 </div>
                 
                 <div className="form-group col-md-4 pt-4">
-                <label htmlFor="fromCurrency">Валюта</label>
+                <label htmlFor="fromCurrency">Исходная валюта</label>
                 <select id="fromCurrency" className="form-control" onChange={e => fromCurrencyChangeHandler(e.target.value)}>
                     { currencyTypes !== undefined ? currencyTypes.map((type, index) => {
                         return <option value={type.code} key={index}>{type.name}</option>
@@ -66,7 +67,7 @@ function Exchanger() {
                 </div>
 
                 <div className="form-group col-md-4 pt-4">
-                <label htmlFor="toCurrency">Валюта</label>
+                <label htmlFor="toCurrency">Целевая валюта</label>
                 <select id="toCurrency" className="form-control" onChange={e => toCurrencyChangeHandler(e.target.value)}>
                     { currencyTypes !== undefined ? currencyTypes.map((type, index) => {
                         return <option value={type.code} key={index}>{type.name}</option>
