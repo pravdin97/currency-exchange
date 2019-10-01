@@ -1,9 +1,10 @@
 import React from 'react';
+import Exchanger from './components/Exchanger';
 
 function App() {
   return (
-    <div className="App">
-      
+    <div className="container">
+      <Exchanger />
     </div>
   );
 }

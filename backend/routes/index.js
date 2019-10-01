@@ -18,9 +18,17 @@ function getCurrencyTypes(rate) {
   if (rate === undefined)
     return
   else {
-    let types = Object.keys(rate)
-    types.push('RUB')
-    return types
+    let codes = Object.keys(rate)
+    let currencies = []
+    codes.map(code => currencies.push({
+      code: code,
+      name: rate[code].Name
+    }))
+    currencies.push({
+      name: "Российский рубль", 
+      code: 'RUB'
+    })
+    return currencies
   }
 }
 
@@ -32,7 +40,10 @@ async function convert(fromCurrency, toCurrency, amount, err) {
   const rate = await getCurrencyRate()
 
   const types = getCurrencyTypes(rate)
-  if (!types.includes(fromCurrency) || !types.includes(toCurrency)) {
+  let codes = []
+  types.map(t => codes.push(t.code))
+
+  if (!codes.includes(fromCurrency) || !codes.includes(toCurrency)) {
     err(new Error('Некорректная валюта'))
     return
   }
@@ -63,9 +74,15 @@ router.get('/', async (req, res) => {
   const fromCurrency = req.query.from,
     toCurrency = req.query.to,
     amount = req.query.amount
+
+  if (fromCurrency === undefined || toCurrency === undefined || amount == undefined || isNaN(parseInt(amount))) {
+    res.status(500).send('Укажите корректные данные')
+    return
+  }
+  
   const result = await convert(fromCurrency, toCurrency, amount, error => res.status(500).send(error.message))
   if (result !== undefined)
     res.json({result})
-});
+})
 
 module.exports = router;
