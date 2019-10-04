@@ -16,7 +16,6 @@ function Exchanger() {
                 setFromCurrency(res.data.currencyTypes[0].code)
                 setToCurrency(res.data.currencyTypes[0].code)
             })
-            .catch(setResult('В данный момент невозможно произвести расчет'))
     }, [])
 
     function amountChangeHandler(a) {

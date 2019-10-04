@@ -71,7 +71,7 @@ router.get('/currencies', async (req, res) => {
 
 /* GET home page. */
 router.get('/', async (req, res) => {
-  const fromCurrency = req.query.from,
+  let fromCurrency = req.query.from,
     toCurrency = req.query.to,
     amount = req.query.amount
 
@@ -79,6 +79,9 @@ router.get('/', async (req, res) => {
     res.status(500).send('Укажите корректные данные')
     return
   }
+
+  fromCurrency = fromCurrency.toUpperCase()
+  toCurrency = toCurrency.toUpperCase()
   
   const result = await convert(fromCurrency, toCurrency, amount, error => res.status(500).send(error.message))
   if (result !== undefined)
